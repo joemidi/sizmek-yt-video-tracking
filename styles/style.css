@@ -1,0 +1,31 @@
+html, body{
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing:border-box;
+}
+
+*:before, *:after{
+    box-sizing:inherit;
+}
+
+#beats-yt-video{
+    position: relative;
+    background: #CC0000;
+    width: 970px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+#yt-video{
+    width: 970px;
+    height: 250px;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
