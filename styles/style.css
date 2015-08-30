@@ -11,7 +11,7 @@ html, body{
     box-sizing:inherit;
 }
 
-#beats-yt-video{
+#yt-video-container{
     position: relative;
     background: #CC0000;
     width: 970px;
