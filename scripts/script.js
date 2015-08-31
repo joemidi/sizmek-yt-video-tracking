@@ -31,9 +31,6 @@ Banner.overlay = {
     },
     onPlayerReady: function(e){
       e.target.playVideo();
-      e.target.mute();
-      EB.userActionCounter("Video_Play");
-      console.log("Video_Play");
       var video = Banner.overlay.video;
       video.duration = (typeof e.target.getDuration === "function") ? e.target.getDuration() : player.B.duration;
       video.currentTime = (typeof e.target.getCurrentTime === "function") ? e.target.getCurrentTime() : player.B.currentTime;
