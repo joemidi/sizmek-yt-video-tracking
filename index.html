@@ -11,7 +11,8 @@
 
 <body>
     <div id="yt-video-container">
-        <div id="yt-video"></div>
+        <!-- <div id="yt-video"></div> -->
+        <iframe id="yt-video" type="text/html" width="970" height="250" src="http://www.youtube.com/embed/MmJ_eIWVuM0?enablejsapi=1" frameborder="0"></iframe>
     </div>
     <script type="text/javascript">
     function initEB() {
@@ -61,7 +62,9 @@
     //now you can just feed stuff into that one function and give it a callback...
     function politeInit(){
         politeLoad(['scripts/script.js','https://www.youtube.com/iframe_api'], function() {
-            //Banner.overlay.init();
+            if (typeof Banner.overlay.init == 'function') { 
+                Banner.overlay.init();
+            }
         });
     }
     var player;
@@ -73,7 +76,9 @@
         }
     function onYouTubeIframeAPIReady() {
         Banner.overlay.video.apiReady = true;
-        Banner.overlay.init();
+        if (typeof Banner.overlay.init == 'function') { 
+          Banner.overlay.init(); 
+        }
     }
 
     window.addEventListener("load", initEB);

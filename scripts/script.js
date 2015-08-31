@@ -1,12 +1,11 @@
 var Banner = Banner || {};
 Banner.overlay = {
   init: function(){
-    if(Banner.overlay.video.apiReady==true){
+    if(Banner.overlay.video.apiReady){
       Banner.overlay.video.init();
       console.log("Start the party");
     } else {
       setTimeout(Banner.overlay.init, 500);
-      //console.log("Wait, lets try again in 500ms");
     }
   },
   video: {
@@ -17,6 +16,8 @@ Banner.overlay = {
     percent50: false,
     percent75: false,
     percent100: false,
+    duration: 0,
+    currentTime: 0,
     init: function(){
       player = new YT.Player(Banner.overlay.video.element, {
         width: '970',
@@ -30,24 +31,41 @@ Banner.overlay = {
     },
     onPlayerReady: function(e){
       e.target.playVideo();
+      e.target.mute();
       EB.userActionCounter("Video_Play");
       console.log("Video_Play");
-      player.getCurrentTime();
-      player.getDuration();
+      var video = Banner.overlay.video;
+      video.duration = (typeof e.target.getDuration === "function") ? e.target.getDuration() : player.B.duration;
+      video.currentTime = (typeof e.target.getCurrentTime === "function") ? e.target.getCurrentTime() : player.B.currentTime;
     },
     onPlayerStateChange: function(e){
-      if (e.data == YT.PlayerState.PLAYING) {
+      var video = Banner.overlay.video;
+      if (e.data == YT.PlayerState.PLAYING && !video.percent100) {
         Banner.overlay.video.checkVideoInterval = setInterval(Banner.overlay.video.checkVideoPercent, 1000);
+        EB.userActionCounter("Video_Play");
+        console.log("Video_Play");
+      } else if (e.data == YT.PlayerState.PAUSED) {
+        EB.userActionCounter("Video_Paused");
+        console.log("Video_Paused");
+        clearInterval(Banner.overlay.video.checkVideoInterval);
+      } else if (e.data == YT.PlayerState.BUFFERING) {
+        EB.userActionCounter("Video_Buffering");
+        console.log("Video_Buffering");
+      } else if (e.data == YT.PlayerState.ENDED){
+        EB.userActionCounter("Video_Stopped");
+        console.log("Video_Stopped");
+        clearInterval(Banner.overlay.video.checkVideoInterval);
       }
     },
     stopVideo: function(){
       player.stopVideo();
     },
-    checkVideoPercent: function(){
-      var a = player.getDuration();
-      var b = player.getCurrentTime();
-      var c = ((a - b) / a)*100;
+    checkVideoPercent: function(target){
       var video = Banner.overlay.video;
+      var a = video.duration;
+      var b = (typeof player.getCurrentTime === "function") ? player.getCurrentTime() : player.B.currentTime;
+      var c = ((a - b) / a)*100;
+      console.log("Current Time: "+b +", Duration: "+a);
       if(c<=76 && !video.percent25){
         console.log("25% Playback");
         EB.userActionCounter("25%_Playback");
