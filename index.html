@@ -16,7 +16,7 @@
     <script type="text/javascript">
     var player;
     var Banner = Banner || {};
-        Banner.overlay = {
+        Banner = {
             video:{
                 apiReady: false
             }
@@ -68,16 +68,16 @@
     //now you can just feed stuff into that one function and give it a callback...
     function politeInit(){
         politeLoad(['scripts/script.js','https://www.youtube.com/iframe_api'], function() {
-            if (typeof Banner.overlay.init == 'function') { 
-                Banner.overlay.init();
+            if (typeof Banner.init == 'function') { 
+                Banner.init();
             }
         });
     }
 
     function onYouTubeIframeAPIReady() {
-        Banner.overlay.video.apiReady = true;
-        if (typeof Banner.overlay.init == 'function') { 
-          Banner.overlay.init(); 
+        Banner.video.apiReady = true;
+        if (typeof Banner.init == 'function') { 
+          Banner.init(); 
         }
     }
 

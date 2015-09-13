@@ -1,11 +1,11 @@
 var Banner = Banner || {};
-Banner.overlay = {
+Banner = {
   init: function(){
-    if(Banner.overlay.video.apiReady){
-      Banner.overlay.video.init();
+    if(Banner.video.apiReady){
+      Banner.video.init();
       console.log("Banner Initialised");
     } else {
-      setTimeout(Banner.overlay.init, 500);
+      setTimeout(Banner.init, 500);
     }
   },
   video: {
@@ -19,13 +19,13 @@ Banner.overlay = {
     duration: 0,
     currentTime: 0,
     init: function(){
-      player = new YT.Player(Banner.overlay.video.element, {
+      player = new YT.Player(Banner.video.element, {
         width: '970',
         height: '250',
-        videoId: Banner.overlay.video.id,
+        videoId: Banner.video.id,
         events: {
-          'onReady': Banner.overlay.video.onPlayerReady,
-          'onStateChange': Banner.overlay.video.onPlayerStateChange
+          'onReady': Banner.video.onPlayerReady,
+          'onStateChange': Banner.video.onPlayerStateChange
         }
       });
       console.log("YouTube Video Initialised");
@@ -34,19 +34,19 @@ Banner.overlay = {
     },
     onPlayerReady: function(e){
       e.target.playVideo();
-      var video = Banner.overlay.video;
+      var video = Banner.video;
       video.duration = (typeof e.target.getDuration === "function") ? e.target.getDuration() : player.B.duration;
       video.currentTime = (typeof e.target.getCurrentTime === "function") ? e.target.getCurrentTime() : player.B.currentTime;
       video.currentVideoId = (typeof e.target.getVideoUrl === "function") ? e.target.getVideoUrl().slice(-11) : player.h.h.videoId;
       console.log("VIDEO_onPlayerReady");
     },
     onPlayerStateChange: function(e){
-      var video = Banner.overlay.video;
+      var video = Banner.video;
       //Update these if the video has been changed.
       video.duration = (typeof e.target.getDuration === "function") ? e.target.getDuration() : player.B.duration;
       video.currentVideoId = (typeof e.target.getVideoUrl === "function") ? e.target.getVideoUrl().slice(-11) : player.h.h.videoId;
       if (e.data === YT.PlayerState.PLAYING && !video.percent100) {
-        Banner.overlay.video.checkVideoInterval = setInterval(Banner.overlay.video.checkVideoPercent, 1000);
+        video.checkVideoInterval = setInterval(video.checkVideoPercent, 1000);
         EB.userActionCounter("Video_Play");
         console.log("Video_Play");
       } else if (e.data === YT.PlayerState.PLAYING && video.percent100){
@@ -72,10 +72,10 @@ Banner.overlay = {
     },
     stopVideo: function(){
       player.stopVideo();
-      clearInterval(BeatsRWC.video.checkVideoInterval);
+      clearInterval(Banner.video.checkVideoInterval);
     },
     checkVideoPercent: function(target){
-      var video = Banner.overlay.video;
+      var video = Banner.video;
       var a = video.duration;
       var b = (typeof player.getCurrentTime === "function") ? player.getCurrentTime() : player.B.currentTime;
       var c = ((a - b) / a)*100;
